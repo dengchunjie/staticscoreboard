@@ -234,6 +234,23 @@ function updateAllSelects() {
   select3.innerHTML = generateOptions(val3, [val1, val2]);
 }
 
+  // --- 语音播报 ---
+  function speakScore() {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const s1 = document.getElementById('score-1').innerText;
+    const s2 = document.getElementById('score-2').innerText;
+    let text = `${s1} 比 ${s2}`;
+    if (isThreePlayerMode) {
+      const s3 = document.getElementById('score-3').innerText;
+      text = `${s1} 比 ${s2} 比 ${s3}`;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 1.1;
+    window.speechSynthesis.speak(utterance);
+  }
+
   // --- 加减分逻辑 ---
   function updateScore(playerId, change) {
   const scoreId = `score-${playerId}`;
@@ -243,6 +260,7 @@ function updateAllSelects() {
     return;
   }
   scoreEl.innerText = currentScore + change;
+  if (change === 1) speakScore();
 }
 
   // --- 重新开局 ---
