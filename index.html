@@ -123,6 +123,16 @@
   
 </div>
 
+ <!-- 语音播报开关按钮 -->
+<button onclick="toggleVoice()" id="voice-toggle" class="fixed top-6 left-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white shadow-lg transition-all duration-300">
+    <svg id="voice-on-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M17.95 6.05a8 8 0 010 11.9M6.5 8.5H3a1 1 0 00-1 1v5a1 1 0 001 1h3.5l5 4V4.5l-5 4z"></path>
+    </svg>
+    <svg id="voice-off-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.5 8.5H3a1 1 0 00-1 1v5a1 1 0 001 1h3.5l5 4V4.5l-5 4zM23 9l-6 6M17 9l6 6"></path>
+    </svg>
+</button>
+
  <!-- 全屏切换按钮 -->
 <button onclick="toggleFullScreen()" class="fixed top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white shadow-lg transition-all duration-300 group">
     <!-- 进入全屏图标 (默认显示) -->
@@ -235,8 +245,16 @@ function updateAllSelects() {
 }
 
   // --- 语音播报 ---
+  let voiceEnabled = true;
+
+  function toggleVoice() {
+    voiceEnabled = !voiceEnabled;
+    document.getElementById('voice-on-icon').classList.toggle('hidden', !voiceEnabled);
+    document.getElementById('voice-off-icon').classList.toggle('hidden', voiceEnabled);
+  }
+
   function speakScore() {
-    if (!window.speechSynthesis) return;
+    if (!voiceEnabled || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const s1 = document.getElementById('score-1').innerText;
     const s2 = document.getElementById('score-2').innerText;
