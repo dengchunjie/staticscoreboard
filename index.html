@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Arena Scorer - Billiards Tournament</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="css/home.css" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#d7f9ff",
+                    "surface-bright": "#f5f6f7",
+                    "inverse-surface": "#0c0f10",
+                    "on-surface": "#2c2f30",
+                    "outline": "#757778",
+                    "on-primary-fixed": "#000000",
+                    "tertiary-container": "#58e7fb",
+                    "on-secondary": "#cdffd4",
+                    "secondary-fixed-dim": "#5bef90",
+                    "secondary-dim": "#005c2d",
+                    "on-primary-fixed-variant": "#00276c",
+                    "surface-dim": "#d1d5d7",
+                    "surface-container": "#e6e8ea",
+                    "on-surface-variant": "#595c5d",
+                    "primary-dim": "#0047b6",
+                    "inverse-primary": "#5e8bff",
+                    "tertiary-dim": "#005862",
+                    "on-secondary-container": "#005f2f",
+                    "on-secondary-fixed-variant": "#006a35",
+                    "on-primary": "#f1f2ff",
+                    "outline-variant": "#abadae",
+                    "on-tertiary-container": "#00515b",
+                    "error-dim": "#9f0519",
+                    "surface-variant": "#dadddf",
+                    "surface-container-low": "#eff1f2",
+                    "secondary": "#006a35",
+                    "primary-fixed": "#799dff",
+                    "error-container": "#fb5151",
+                    "surface-tint": "#0052cf",
+                    "on-background": "#2c2f30",
+                    "on-primary-container": "#001e58",
+                    "tertiary": "#006571",
+                    "inverse-on-surface": "#9b9d9e",
+                    "surface-container-highest": "#dadddf",
+                    "surface-container-high": "#e0e3e4",
+                    "tertiary-fixed": "#58e7fb",
+                    "on-secondary-fixed": "#004a23",
+                    "primary-fixed-dim": "#628eff",
+                    "tertiary-fixed-dim": "#45d8ed",
+                    "secondary-fixed": "#6bfe9c",
+                    "secondary-container": "#6bfe9c",
+                    "on-error": "#ffefee",
+                    "surface": "#f5f6f7",
+                    "on-error-container": "#570008",
+                    "primary-container": "#799dff",
+                    "on-tertiary-fixed": "#003c44",
+                    "error": "#b31b25",
+                    "background": "#f5f6f7",
+                    "surface-container-lowest": "#ffffff",
+                    "primary": "#0052cf",
+                    "on-tertiary-fixed-variant": "#005b66"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk", "sans-serif"],
+                    "body": ["Manrope", "sans-serif"],
+                    "label": ["Manrope", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .score-display {
+            font-size: 24rem;
+            line-height: 1;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+        }
+        .savv-blue { background-color: #144EA0; }
+        .funny-pink { background-color: #CF98AE; }
+        .cool-gray { background-color: #131610; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+        }
+/* 修复 player-3 隐藏时的溢出问题 */
+#player-3 {
+  /* 确保内容不会在宽度为0时溢出显示 */
+  min-width: 0;
+}
+
+/* 优化切换过渡效果 */
+#player-1, #player-2, #player-3 {
+  transition-property: width, background;
+  transition-duration: 300ms;
+}
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface overflow-hidden h-screen w-screen">
+<!-- Top Navigation Anchor (from Shared Components) -->
+
+<!-- Main Scorer Arena (iPad Landscape Side-by-Side) -->
+<main class="flex h-[calc(100vh)] w-full overflow-hidden">
+<!-- Player 1 Section (Left - Savvy Blue) -->
+<section id="player-1" class="savv-blue relative flex flex-col items-center justify-center text-white transition-all duration-300 w-1/2">
+<!-- Background Accent Texture -->
+<div class="absolute inset-0 opacity-10 pointer-events-none select-none">
+<img class="w-full h-full object-cover" data-alt="abstract geometric pattern with subtle lines and architectural depth in dark blue tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKJUcFH2g7sHo_IuEXH25FH3eK5jTf3IHn0Q6cUK3qBI6OF3LwFoGj7hrfjG0JjFgctWszfDMBdBqMaIEnNJc0jl4_9jZC7Sx7xJQMQsVNiGHZOWmTkOupynQk7ffhexQ0HqR186YDD6gpxsz_gG8UR3AITfPgyKz24DtPsgMNsHN19GonxFQDconIw9XDRU_rS_tpwEsZx1iwRpEg9o1h-cmWnXxMh9OqeV6biiHawwQvxKBEiX155PpFllZdwh0I6fIjrD14IVI"/>
+</div>
+<!-- Player Label -->
+<div class="absolute top-12 w-full flex flex-col items-center gap-1">
+  <span class="text-white/60 font-label text-xs tracking-[0.2em] uppercase font-semibold">PLAYER 1</span>
+  <select id="select-1" class="text-white text-4xl bg-transparent border-b border-white/30 text-center font-bold mt-2 z-50 text-right pr-14">
+  </select>
+</div>
+<!-- Active Indicator (Break Green) -->
+<!-- Large Score Display -->
+<div class="relative z-10 select-none">
+<span id="score-1" class="score-display text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)]">0</span>
+</div>
+<!-- Scoring Controls -->
+<div class="flex items-center gap-16 mt-8 z-20">
+<button onclick="updateScore(1, -1)" class="w-24 h-24 rounded-full glass-panel border border-white/20 flex items-center justify-center text-white hover:bg-white/20 active:scale-90 transition-all">
+<span class="material-symbols-outlined text-4xl" data-icon="remove">remove</span>
+</button>
+<button onclick="updateScore(1, 1)" class="w-32 h-32 rounded-full bg-white text-primary flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-6xl" data-icon="add">add</span>
+</button>
+</div>
+</section>
+<!-- Divider Line (Kinetic Sophistication) -->
+<div class="w-[2px] h-full bg-white/10 z-30"></div>
+<!-- Player 2 Section (Right - Funny Weather Pink) -->
+<section id="player-2" class="funny-pink relative flex flex-col items-center justify-center text-white transition-all duration-300 w-1/2">
+<!-- Background Accent Texture -->
+<div class="absolute inset-0 opacity-10 pointer-events-none select-none">
+<img class="w-full h-full object-cover" data-alt="soft pink and lavender gradient with subtle grain texture and elegant light play" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkNt231VAfqaCeCC7ZTRFb6Edkfx7lqnyrBg2Rl4xjSgL66S2I9xTuZCjNYA6agOPAZ-mM73_CUNFiHkts2vaFY2-DWMfVY1erJV3l7kdxUmSSHIshsRSkreNP-Ezo0fviX275epfqXspiELIUUkcCXh1ceqH2cr7x4mCmgGxqmJCYjdAsw6JM5DNdrAS7VhVMbbNsERv3A4u59XWy0X3fIHRGygobNRiwYeFH4qyMJukJM-B-0DZLICzhU8HY0F5r0X7WoSDHRxU"/>
+</div>
+<!-- Player Label (居中版本) -->
+<div class="absolute top-12 w-full flex flex-col items-center gap-1">
+  <span class="text-white/60 font-label text-xs tracking-[0.2em] uppercase font-semibold">PLAYER 2</span>
+  <select id="select-2" class="text-white text-4xl bg-transparent border-b border-white/30 text-center font-bold mt-2 z-50 text-right pr-14">
+  </select>
+</div>
+<!-- Score Display -->
+<div class="relative z-10 select-none">
+<span id="score-2" class="score-display text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]">0</span>
+</div>
+<!-- Scoring Controls -->
+<div class="flex items-center gap-16 mt-8 z-20">
+<button onclick="updateScore(2, -1)" class="w-24 h-24 rounded-full glass-panel border border-white/20 flex items-center justify-center text-white hover:bg-white/20 active:scale-90 transition-all">
+<span class="material-symbols-outlined text-4xl" data-icon="remove">remove</span>
+</button>
+<button onclick="updateScore(2, 1)" class="w-32 h-32 rounded-full bg-white text-[#CF98AE] flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-6xl" data-icon="add">add</span>
+</button>
+</div>
+</section>
+<section id="player-3" class="cool-gray relative flex flex-col items-center justify-center text-white transition-all duration-300 w-0 overflow-hidden">
+<!-- Background Accent Texture -->
+<div class="absolute inset-0 opacity-10 pointer-events-none select-none">
+<img class="w-full h-full object-cover" data-alt="soft pink and lavender gradient with subtle grain texture and elegant light play" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkNt231VAfqaCeCC7ZTRFb6Edkfx7lqnyrBg2Rl4xjSgL66S2I9xTuZCjNYA6agOPAZ-mM73_CUNFiHkts2vaFY2-DWMfVY1erJV3l7kdxUmSSHIshsRSkreNP-Ezo0fviX275epfqXspiELIUUkcCXh1ceqH2cr7x4mCmgGxqmJCYjdAsw6JM5DNdrAS7VhVMbbNsERv3A4u59XWy0X3fIHRGygobNRiwYeFH4qyMJukJM-B-0DZLICzhU8HY0F5r0X7WoSDHRxU"/>
+</div>
+<!-- Player Label (居中版本) -->
+<div class="absolute top-12 w-full flex flex-col items-center gap-1">
+  <span class="text-white/60 font-label text-xs tracking-[0.2em] uppercase font-semibold">PLAYER 3</span>
+  <select id="select-3" class="text-white text-4xl bg-transparent border-b border-white/30 text-center font-bold mt-2 z-50 text-right pr-14">
+  </select>
+</div>
+<!-- Score Display -->
+<div class="relative z-10 select-none">
+<span id="score-3" class="score-display text-white drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]">0</span>
+</div>
+<!-- Scoring Controls -->
+<div class="flex items-center gap-16 mt-8 z-20">
+<button onclick="updateScore(3, -1)" class="w-24 h-24 rounded-full glass-panel border border-white/20 flex items-center justify-center text-white hover:bg-white/20 active:scale-90 transition-all">
+<span class="material-symbols-outlined text-4xl" data-icon="remove">remove</span>
+</button>
+<button onclick="updateScore(3, 1)" class="w-32 h-32 rounded-full bg-white text-[#CF98AE] flex items-center justify-center shadow-2xl hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-6xl" data-icon="add">add</span>
+</button>
+</div>
+</section>
+<!-- Match Info Floating Bar -->
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 glass-panel border border-white/10 px-12 py-4 rounded-xl flex items-center gap-12 z-40">
+  <!-- Left Button: Start/Pause -->
+  <button onclick="toggleMode();" id="mode-toggle" class="px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm text-white font-bold transition-all">
+    <span class="material-symbols-outlined">people_outline</span>
+  </button>
+<div class="flex flex-col items-center">
+<span class="text-white/50 text-[10px] uppercase tracking-widest font-bold">MATCH TIME</span>
+<span class="text-white font-headline text-2xl font-bold" id="timer-display">00:00</span>
+</div>
+  <button onclick="resetGame();" class="px-4 py-2 rounded-lg bg-red-500/20 backdrop-blur-sm text-red-500 font-bold transition-all">
+    <span class="material-symbols-outlined text-3xl">restart_alt</span>
+  </button>
+  
+</div>
+
+ <!-- 全屏切换按钮 -->
+<button onclick="toggleFullScreen()" class="fixed top-6 right-6 z-50 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white shadow-lg transition-all duration-300 group">
+    <!-- 进入全屏图标 (默认显示) -->
+    <svg id="enter-fullscreen-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+    </svg>
+    <!-- 退出全屏图标 (默认隐藏) -->
+    <svg id="exit-fullscreen-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+</button>
+
+</main>
+<script>
+  // ==========================================
+  // 1. 数据状态管理 (核心：数据驱动视图)
+  // ==========================================
+  const state = {
+    // 改为数组管理，或者用 p1, p2, p3
+  players: [
+    { id: 'A', name: '玩家1', score: 0 }, // 索引 0 对应顶部
+    { id: 'B', name: '玩家2', score: 0 }, // 索引 1 对应左侧
+    { id: 'C', name: '玩家3', score: 0 }  // 索引 2 对应右侧
+  ]
+  };
+
+  // 1. 定义选手池 (在这里添加你想用的名字)
+  const allPlayers = [
+    { id: 'B', name: '杨一川', score: 0 },
+    { id: 'A', name: '李云飞', score: 0 },
+    { id: 'C', name: '邓纯洁', score: 0 },
+    { id: 'D', name: '唐旺', score: 0 },
+    { id: 'E', name: '彭璟', score: 0 }
+];
+
+// 2. 获取 DOM 元素
+const select1 = document.getElementById('select-1');
+const select2 = document.getElementById('select-2');
+const select3 = document.getElementById('select-3');
+
+// 3. 初始化：添加监听器
+select1.addEventListener('change', updateAllSelects);
+select2.addEventListener('change', updateAllSelects);
+select3.addEventListener('change', updateAllSelects);
+
+  // ==========================================
+  // 2. 获取 DOM 元素 (带错误检查)
+  // ==========================================
+  const els = {
+  
+    // btnReset: document.getElementById('btn-reset'),
+    // btnSwap: document.getElementById('btn-swap'),
+    
+    // 计时器元素
+    timerDisplay: document.getElementById('timer-display'),
+    // timerIcon: document.getElementById('timer-icon'),
+    // btnResetTimer: document.getElementById('btn-reset-timer')
+  };
+
+  // 检查是否所有元素都找到了，防止报错
+  function checkElements() {
+    for (const [key, value] of Object.entries(els)) {
+      if (!value) console.warn(`缺少元素: ${key}`);
+    }
+  }
+
+  // ==========================================
+  // 3. 视图更新函数 (统一刷新界面)
+  // ==========================================
+
+  // ==========================================
+  // 4. 业务逻辑
+  // ==========================================
+  
+  // 4. 核心逻辑：更新所有下拉框
+function updateAllSelects() {
+  // 获取当前三个下拉框选中的值
+  const val1 = select1.value;
+  const val2 = select2.value;
+  const val3 = select3.value;
+
+  // 辅助函数：生成选项 HTML
+  // currentVal: 当前下拉框自己的值 (保持选中)
+  // excludeVals: 需要排除的其他人的值数组
+  function generateOptions(currentVal, excludeVals) {
+    let html = '<option value="">选择选手</option>';
+    
+    allPlayers.forEach(player => {
+      // 如果这个选手已经被别人选了，就跳过 (disabled 或 不生成)
+      if (excludeVals.includes(player.id)) {
+        // 如果是自己当前选中的那个（即使被别人选了，也要显示出来，否则界面会跳变）
+        if (player.id === currentVal) {
+           html += `<option value="${player.id}" selected>${player.name}</option>`;
+        }
+        // 如果没选中，就不生成这个选项
+      } else {
+        // 正常的选项
+        const selected = player.id === currentVal ? 'selected' : '';
+        html += `<option value="${player.id}" ${selected}>${player.name}</option>`;
+      }
+    });
+    return html;
+  }
+
+  // 重新渲染三个下拉框
+  // 逻辑：我的选项 = 总名单 - 另外两个人的选择
+  select1.innerHTML = generateOptions(val1, [val2, val3]);
+  select2.innerHTML = generateOptions(val2, [val1, val3]);
+  select3.innerHTML = generateOptions(val3, [val1, val2]);
+}
+
+  // --- 加减分逻辑 ---
+  function updateScore(playerId, change) {
+  const scoreId = `score-${playerId}`;
+  const scoreEl = document.getElementById(scoreId);
+  let currentScore = parseInt(scoreEl.innerText);
+  if(currentScore == 0 && change == -1){
+    return;
+  }
+  scoreEl.innerText = currentScore + change;
+}
+
+  // --- 重新开局 ---
+  function resetGame() {
+    document.getElementById('score-1').innerHTML = "0";
+    document.getElementById('score-2').innerHTML = "0";
+    document.getElementById('score-3').innerHTML = "0";
+
+    // 名字保持不变
+    updateAllSelects();
+    resetTimer(); // 先重置计时器内部状态
+    toggleTimer();
+  }
+
+// ==========================================
+// 5. 事件绑定 (终极防穿透版)
+// ==========================================
+function initEvents() {
+  // 通用处理函数：这是解决点击不灵的核心
+  const bindTouch = (element, action, buttonName) => {
+    if (!element) {
+      console.error(`致命错误：找不到按钮元素 ${buttonName}`);
+      return;
+    }
+
+    // 关键点1：同时监听 touchstart 和 touchend
+    // touchstart 用来标记“我已按下”，防止浏览器误判为滚动
+    element.addEventListener('touchstart', (e) => {
+      e.stopPropagation(); // 阻止事件冒泡到父级
+      // 不需要 preventDefault，除非你发现按下去有背景滚动
+    }, { passive: false }); // passive: false 是为了让 preventDefault 生效
+
+    element.addEventListener('touchend', (e) => {
+      // 关键点2：在 touchend 时立刻阻止默认行为
+      // 防止浏览器在点击后触发 300ms 后的“幽灵点击”
+      e.stopPropagation();
+      e.preventDefault(); 
+      
+      // 执行你的逻辑
+      try {
+        action();
+      } catch (err) {
+        console.error(`按钮 ${buttonName} 的逻辑报错:`, err);
+      }
+    }, { passive: false });
+
+    // 关键点3：兼容桌面端鼠标点击
+    element.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault(); // 鼠标点击也强制阻止默认
+      action();
+    });
+  };
+
+  // 绑定所有按钮 (请确保这里的 ID 和你的 HTML 完全一致)
+  // bindTouch(els.btnReset, resetGame, 'Reset');
+  // ... 其他按钮同理
+}
+
+  // ==========================================
+  // 6. 计时器逻辑 (保持原样，已优化)
+  // ==========================================
+  let timerInterval = null;
+  let isRunning = false;
+  let startTime = 0;
+  let elapsedTime = 0;
+
+  function formatTime(totalSeconds) {
+    const m = Math.floor(totalSeconds / 60);
+    const s = totalSeconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  function updateTimer() {
+    let current = elapsedTime;
+    if (isRunning) current += Math.floor((Date.now() - startTime) / 1000);
+    if(els.timerDisplay) els.timerDisplay.textContent = formatTime(current);
+  }
+
+function toggleTimer() {
+  // 如果已经有定时器在跑了，先清除它
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
+  
+  // 重置开始时间
+  startTime = Date.now();
+  // 重置流逝时间
+  elapsedTime = 0;
+  
+  // 开启新的定时器
+  timerInterval = setInterval(updateTimer, 1000);
+  isRunning = true; // 别忘了把状态设为运行
+}
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    isRunning = false;
+    elapsedTime = 0;
+    updateTimer();
+  }
+
+  // ==========================================
+  // 7. 启动
+  // ==========================================
+  window.addEventListener('DOMContentLoaded', () => {
+    checkElements(); // 检查是否有漏掉的 ID
+    initEvents();    // 绑定事件
+    updateTimer();   // 初始计时器
+    // 执行第一次渲染
+    updateAllSelects();
+
+    // 确保初始加载时 player-3 是隐藏的 (w-0)
+  const p3 = document.getElementById('player-3');
+  if (p3 && !p3.classList.contains('w-0')) {
+    // 如果 HTML 里写死了 w-1/2 或 w-1/3，强制初始化为 0
+    p3.classList.remove('w-1/2', 'w-1/3');
+    p3.classList.add('w-0');
+    p3.classList.add('pointer-events-none');
+  }
+  });
+</script>
+
+
+<script>
+function toggleFullScreen() {
+    const doc = window.document;
+    const docEl = doc.documentElement; // 获取根元素
+
+    const enterIcon = document.getElementById('enter-fullscreen-icon');
+    const exitIcon = document.getElementById('exit-fullscreen-icon');
+
+    // 判断是否已经处于全屏状态
+    const isFullscreen = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+
+    if (!isFullscreen) {
+        // 进入全屏
+        const requestMethod = docEl.requestFullscreen || docEl.webkitRequestFullscreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+        if (requestMethod) {
+            requestMethod.call(docEl);
+        }
+    } else {
+        // 退出全屏
+        const exitMethod = doc.exitFullscreen || doc.webkitExitFullscreen || doc.mozCancelFullScreen || doc.msExitFullscreen;
+        if (exitMethod) {
+            exitMethod.call(doc);
+        }
+    }
+}
+
+// 监听全屏变化事件，自动切换图标
+document.addEventListener('fullscreenchange', toggleIcon);
+document.addEventListener('webkitfullscreenchange', toggleIcon);
+document.addEventListener('mozfullscreenchange', toggleIcon);
+document.addEventListener('MSFullscreenChange', toggleIcon);
+
+function toggleIcon() {
+    const doc = window.document;
+    const isFullscreen = doc.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement;
+    
+    const enterIcon = document.getElementById('enter-fullscreen-icon');
+    const exitIcon = document.getElementById('exit-fullscreen-icon');
+
+    if (isFullscreen) {
+        enterIcon.classList.add('hidden');
+        exitIcon.classList.remove('hidden');
+    } else {
+        enterIcon.classList.remove('hidden');
+        exitIcon.classList.add('hidden');
+    }
+}
+
+// 核心切换函数
+let isThreePlayerMode = false;
+/**
+ * 切换双人/三人模式的核心函数
+ */
+function toggleMode() {
+  // 获取 DOM 元素
+  const p1 = document.getElementById('player-1');
+  const p2 = document.getElementById('player-2');
+  const p3 = document.getElementById('player-3');
+  const btn = document.getElementById('mode-toggle');
+
+  // 切换状态
+  isThreePlayerMode = !isThreePlayerMode;
+  const divider = document.querySelector('.w-\\[2px\\]'); // Tailwind 转义选择器
+
+  if (isThreePlayerMode) {
+    // --- 进入三人模式 ---
+
+    // 1. 修改按钮状态
+    btn.innerHTML = '<span class="material-symbols-outlined">diversity_3</span>';
+
+    // 2. 修改 Player 1 & 2 宽度
+    // 移除双人模式的类，添加三人模式的类
+    p1.classList.remove('w-1/2');
+    p1.classList.add('w-1/3');
+    
+    p2.classList.remove('w-1/2');
+    p2.classList.add('w-1/3');
+
+    // 3. 显示 Player 3
+    p3.classList.remove('w-0', 'pointer-events-none');
+    p3.classList.add('w-1/3');
+
+    divider.style.display = 'none'; 
+    
+  } else {
+    // --- 进入双人模式 ---
+
+    // 1. 修改按钮状态
+    btn.innerHTML = '<span class="material-symbols-outlined">people_outline</span>';
+
+    // 2. 修改 Player 1 & 2 宽度
+    p1.classList.remove('w-1/3');
+    p1.classList.add('w-1/2');
+    
+    p2.classList.remove('w-1/3');
+    p2.classList.add('w-1/2');
+
+    // 3. 隐藏 Player 3 (关键修复点)
+    // 设置宽度为0，并禁用指针事件防止点击
+    p3.classList.remove('w-1/3');
+    p3.classList.add('w-0', 'pointer-events-none');
+
+    // 4. 可选：重置 Player 3 状态，防止切换回来时数据还在
+    document.getElementById('score-3').textContent = "0";
+    document.getElementById('select-3').value = "";
+    divider.style.display = 'block'; 
+    
+    select3.innerHTML = '<option value="">选择选手</option>';
+  }
+  updateAllSelects();
+}
+</script>
+</body></html>
